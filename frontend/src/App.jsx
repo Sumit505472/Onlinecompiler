@@ -21,10 +21,10 @@ function App() {
       return 0; 
   }`);
   const [output, setOutput] = useState('');
-
+  const [language, setLanguage] = useState('cpp');
   const handleSubmit = async () => {
     const payload = {
-      language: 'cpp',
+      language,
       code
     };
 
@@ -33,20 +33,27 @@ function App() {
       console.log(data);
       setOutput(data.output);
     } catch (error) {
-      console.log(error.response);
+      console.log(error?.response || error);
+      setOutput("Error while compiling");
     }
   }
 
   return (
     <div className="container mx-auto py-8 flex flex-col items-center">
       <h1 className="text-3xl font-bold mb-4">Online Code Compiler</h1>
-      <select className="select-box border border-gray-300 rounded-lg py-1.5 px-4 mb-1 focus:outline-none focus:border-indigo-500">
+      <select
+        value={language}
+        onChange={(e) => setLanguage(e.target.value)}
+        className="select-box border border-gray-300 rounded-lg py-1.5 px-4 mb-1 focus:outline-none focus:border-indigo-500"
+      >
         <option value='cpp'>C++</option>
         <option value='c'>C</option>
-        <option value='py'>Python</option>
+        <option value='python'>Python</option>
         <option value='java'>Java</option>
       </select>
+
       <br />
+
       <div className="bg-gray-100 shadow-md w-full max-w-lg mb-4" style={{ height: '300px', overflowY: 'auto' }}>
         <Editor
           value={code}
