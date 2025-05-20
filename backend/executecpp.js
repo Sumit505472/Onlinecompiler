@@ -8,9 +8,12 @@ import {v4 as uuid} from "uuid";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const outputPath = path.join(__dirname, "outputs");//C:\Users\Sumit\Desktop\onlinecompiler\backend\outputs
+const outputPath = path.join(__dirname, "outputs");
+//C:\Users\Sumit\Desktop\onlinecompiler\backend\outputs
+//here a folder created with name outputs in which.exe file will get stored
+
 if (!fs.existsSync(outputPath)) {
-    fs.mkdirSync(outputPath, { recursive: true });
+    fs.mkdirSync(outputPath, { recursive: true });//recursive :true mean if parent folder(onlinecompiler,backend,or output )is not created then node.js will also create it 
 }
 
 // 'C:\\Users\\Sumit\\Desktop\\onlinecompiler\\backend\\codes\\5aab0e21-ef55-46a7-bfca-26354d058178.cpp'
