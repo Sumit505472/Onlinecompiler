@@ -40,11 +40,10 @@ app.post("/run",async(req,res)=>{
         }
         res.json({filePath,output});
         
-    } catch (error) {
-        console.error("Error in running code",error);
-        return res.status(500).json({success:false,error:error.message});
-        
-    }
+  } catch (err) {
+  console.error("Error in running  code:", err);
+  res.status(500).json({ success: false, error: err.error || "Something went wrong" });
+}
 
   
 });

@@ -13,24 +13,28 @@ if (!fs.existsSync(outputPath)) {
 }
 
 const executeJava = (filePath) => {
-  const jobId = path.basename(filePath).split(".")[0];
-  const classDir = path.join(outputPath, jobId);
-
-  if (!fs.existsSync(classDir)) {
-    fs.mkdirSync(classDir, { recursive: true });
-  }
-
   return new Promise((resolve, reject) => {
-    exec(`javac -d "${classDir}" "${filePath}" && java -cp "${classDir}" ${jobId}`, (error, stdout, stderr) => {
+    const code = fs.readFileSync(filePath, "utf-8"); // ✅ read Java code from file
+
+    const jobId = `job-${Date.now()}`;
+    const jobDir = path.join(outputPath, jobId);
+    fs.mkdirSync(jobDir, { recursive: true });
+
+    const mainFilePath = path.join(jobDir, 'Main.java');
+    fs.writeFileSync(mainFilePath, code);
+
+    const command = `javac -d "${jobDir}" "${mainFilePath}" && java -cp "${jobDir}" Main`;
+
+    exec(command, (error, stdout, stderr) => {
       if (error) {
-        return reject({ error, stderr });
+        console.error("Execution Error:", error.message);
+        return reject({ success: false, error: error.message });
       }
       if (stderr) {
-        return reject(stderr);
+        console.error("Stderr:", stderr);
+        return reject({ success: false, error: stderr });
       }
-      if (stdout) {
-        return resolve(stdout);
-      }
+      return resolve(stdout);
     });
   });
 };
